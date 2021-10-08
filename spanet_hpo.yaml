@@ -1,10 +1,10 @@
 kind: Experiment
 metadata:
   namespace: jonathan-bossio
-  name: spanet-testX
+  name: spanet-jonatest
 spec:
   parallelTrialCount: 1
-  maxTrialCount: 1
+  maxTrialCount: 4
   maxFailedTrialCount: 1
   objective:
     type: maximize
