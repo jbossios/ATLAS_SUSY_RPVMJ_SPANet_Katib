@@ -1,6 +1,6 @@
 kind: Experiment
 metadata:
-  namespace: another
+  namespace: jonathan-bossio
   name: spanet-testX
 spec:
   parallelTrialCount: 1
