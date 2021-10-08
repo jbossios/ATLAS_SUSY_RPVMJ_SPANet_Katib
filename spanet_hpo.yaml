@@ -1,7 +1,7 @@
 kind: Experiment
 metadata:
   namespace: jonathan-bossio
-  name: spanet-jonatest
+  name: spanet-testonlyfullevents
 spec:
   parallelTrialCount: 1
   maxTrialCount: 4
