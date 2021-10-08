@@ -1,0 +1,13 @@
+scikit-learn
+pandas
+boto3
+minio
+kubeflow-metadata
+torch
+torchvision
+torchaudio
+pytorch-lightning
+h5py
+sympy
+numba
+opt_einsum

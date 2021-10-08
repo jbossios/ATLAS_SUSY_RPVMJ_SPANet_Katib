@@ -1,0 +1,21 @@
+FROM python:3.8
+
+# Install basic dependencies
+RUN apt-get -qq update && \
+    apt-get -yqq install libpam-krb5 krb5-user && \
+    apt-get -yqq clean && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates bash-completion tar less \
+        python3-pip python-setuptools build-essential python-dev \
+        python3-wheel && \
+    rm -rf /var/lib/apt/lists/*
+    
+# Setup kerberos
+COPY krb5.conf /etc/krb5.conf
+
+# Install pip requirements
+COPY requirements.txt /requirements.txt
+RUN pip3 install --upgrade pip && pip3 install -r /requirements.txt
+
+# Copy script
+COPY spanet_hpo.py /spanet_hpo.py

@@ -1,0 +1,142 @@
+kind: Experiment
+metadata:
+  namespace: jonathan-bossio
+  name: spanet-test
+spec:
+  parallelTrialCount: 1
+  maxTrialCount: 1
+  maxFailedTrialCount: 1
+  objective:
+    type: maximize
+    goal: 1
+    objectiveMetricName: reco_efficiency
+  algorithm:
+    algorithmName: random
+  metricsCollectorSpec:
+    source:
+      filter:
+        metricsFormat:
+        - ([\w|-]+)\s*=\s*((-?\d+)(\.\d+)?)
+      fileSystemPath:
+        path: "/model_outputs/metrics_custom.txt"
+        kind: File
+    collector:
+        kind: File
+  parameters:
+    - name: --learning_rate
+      parameterType: double
+      feasibleSpace:
+        min: 0.0001
+        max: 0.01
+        step: 0.0005
+    - name: --batch_size
+      parameterType: int
+      feasibleSpace:
+        min: 2048
+        max: 2048
+    - name: --dropout
+      parameterType: double
+      feasibleSpace:
+        min: 0.0
+        max: 0.0
+    - name: --l2_penalty
+      parameterType: double
+      feasibleSpace:
+        min: 0.0002
+        max: 0.0002
+    - name: --hidden_dim
+      parameterType: int
+      feasibleSpace:
+        min: 128
+        max: 512
+        step: 128
+    - name: --initial_embedding_dim
+      parameterType: int
+      feasibleSpace:
+        min: 16
+        max: 128
+        step: 16
+    - name: --num_branch_encoder_layers
+      parameterType: int
+      feasibleSpace:
+        min: 1
+        max: 6
+        step: 1
+    - name: --num_encoder_layers
+      parameterType: int
+      feasibleSpace:
+        min: 4
+        max: 12
+        step: 4
+    - name: --partial_events
+      parameterType: int
+      feasibleSpace:
+        min: 0
+        max: 1
+        step: 1
+    - name: --num_attention_heads
+      parameterType: int
+      feasibleSpace:
+        min: 4
+        max: 12
+        step: 4
+    - name: --num_branch_embedding_layers
+      parameterType: int
+      feasibleSpace:
+        min: 4
+        max: 6
+        step: 1
+    - name: --num_jet_encoder_layers
+      parameterType: int
+      feasibleSpace:
+        min: 0
+        max: 1
+        step: 1
+  trialTemplate:
+    goTemplate:
+      rawTemplate: |-
+        apiVersion: batch/v1
+        kind: Job
+        metadata:
+          name: {{.Trial}}
+          namespace: {{.NameSpace}}
+        spec:
+          backoffLimit: 0
+          template:
+            metadata:
+              annotations:
+                sidecar.istio.io/inject: "false"
+              labels:
+                access-ml-pipeline: "true"
+            spec:
+              restartPolicy: Never
+              serviceAccountName: pipeline-runner
+              volumes:
+                - name: eos
+                  hostPath:
+                    path: /var/eos
+                - name: krb-secret-vol
+                  secret:
+                    secretName: krb-secret
+              containers:
+              - name: {{.Trial}}
+                resources:
+                  limits:
+                    nvidia.com/gpu: 1
+                envFrom:
+                  - configMapRef:
+                      name: userid-configmap
+                volumeMounts:
+                  - name: eos
+                    mountPath: /eos
+                  - name: krb-secret-vol
+                    mountPath: /secret/krb-secret-vol
+                image: gitlab-registry.cern.ch/ai-ml/kubeflow_images/spanet-atlas-v6
+                command:
+                  - "python3"
+                  - "/spanet_hpo.py"
+                  {{- with .HyperParameters}}
+                  {{- range .}}
+                  - "{{.Name}}={{.Value}}"
+                  {{- end}}
+                  {{- end}}
