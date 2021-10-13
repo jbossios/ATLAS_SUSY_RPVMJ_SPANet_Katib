@@ -1,7 +1,7 @@
 kind: Experiment
 metadata:
   namespace: jonathan-bossio
-  name: spanet-testonlyfullevents-v2
+  name: spanet-testlists-num4
 spec:
   parallelTrialCount: 1
   maxTrialCount: 4
@@ -24,73 +24,79 @@ spec:
         kind: File
   parameters:
     - name: --learning_rate
-      parameterType: double
+      parameterType: categorical
       feasibleSpace:
-        min: 0.0001
-        max: 0.01
-        step: 0.0005
+        list:
+          - "0.01"
+          - "0.001"
+          - "0.005"
+          - "0.0001"
+          - "0.0005"
     - name: --batch_size
-      parameterType: int
+      parameterType: discrete
       feasibleSpace:
-        min: 2048
-        max: 2048
+        list:
+          - "2048"
     - name: --dropout
-      parameterType: double
+      parameterType: categorical
       feasibleSpace:
-        min: 0.0
-        max: 0.0
+        list:
+          - "0.0"
     - name: --l2_penalty
-      parameterType: double
+      parameterType: categorical
       feasibleSpace:
-        min: 0.0002
-        max: 0.0002
+        list:
+          - "0.0002"
     - name: --hidden_dim
-      parameterType: int
+      parameterType: discrete
       feasibleSpace:
-        min: 128
-        max: 512
-        step: 128
+        list:
+          - "128"
+          - "256"
+          - "512"
     - name: --initial_embedding_dim
-      parameterType: int
+      parameterType: discrete
       feasibleSpace:
-        min: 16
-        max: 128
-        step: 16
+        list:
+          - "16"
     - name: --num_branch_encoder_layers
-      parameterType: int
+      parameterType: discrete
       feasibleSpace:
-        min: 1
-        max: 6
-        step: 1
+        list:
+          - "1"
+          - "2"
+          - "3"
+          - "4"
+          - "5"
+          - "6"
     - name: --num_encoder_layers
-      parameterType: int
+      parameterType: discrete
       feasibleSpace:
-        min: 4
-        max: 12
-        step: 4
+        list:
+          - "4"
     - name: --partial_events
-      parameterType: int
+      parameterType: discrete
       feasibleSpace:
-        min: 0
-        max: 0
+        list:
+          - "0"
     - name: --num_attention_heads
-      parameterType: int
+      parameterType: discrete
       feasibleSpace:
-        min: 4
-        max: 12
-        step: 4
+        list:
+          - "4"
     - name: --num_branch_embedding_layers
-      parameterType: int
+      parameterType: discrete
       feasibleSpace:
-        min: 4
-        max: 6
-        step: 1
+        list:
+          - "4"
+          - "5"
+          - "6"
     - name: --num_jet_encoder_layers
-      parameterType: int
+      parameterType: discrete
       feasibleSpace:
-        min: 0
-        max: 1
-        step: 1
+        list:
+          - "0"
+          - "1"
   trialTemplate:
     goTemplate:
       rawTemplate: |-
