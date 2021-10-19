@@ -1,0 +1,11 @@
+# How to create a docker image
+sudo docker login gitlab-registry.cern.ch
+sudo docker build . -f Dockerfile -t gitlab-registry.cern.ch/jbossios/docker-images/CUSTOM
+sudo docker push gitlab-registry.cern.ch/jbossios/docker-images/CUSTOM
+
+Repository:
+https://gitlab.cern.ch/jbossios/docker-images
+
+Used:
+1. atlas-spanet-jona-v1
+1. atlas-spanet-jona-v2

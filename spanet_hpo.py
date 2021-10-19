@@ -136,13 +136,22 @@ def evaluate_model(model: JetReconstructionModel, cuda: bool = False):
 results, jet_limits = evaluate_model(model, True if options.num_gpu > 0 else False)
 reco_efficiency    = results[None]["2g/event_purity"]
 
-#print(reco_efficiency)
-
 # Write metrics
 model_output_dir = '/model_outputs'
 
 if not os.path.exists(model_output_dir):
     os.makedirs(model_output_dir)
 
-with open(model_output_dir + '/metrics_custom.txt', 'w') as f:
-    f.write('reco_efficiency=' + str(reco_efficiency))
+# get random number
+import random
+r = random.random()
+
+with open(model_output_dir + '/metrics_custom_{}.txt'.format(r), 'w') as f:
+    f.write('learning_rate               = {}'.format(options.learning_rate)
+    f.write('hidden_dim                  = {}'.format(options.hidden_dim)
+    f.write('initial_embedding_dim       = {}'.format(options.initial_embedding_dim)
+    f.write('num_branch_encoder_layers   = {}'.format(options.num_branch_encoder_layers)
+    f.write('num_encoder_layers          = {}'.format(options.num_encoder_layers)
+    f.write('num_attention_heads         = {}'.format(options.num_attention_heads)
+    f.write('num_branch_embedding_layers = {}'.format(options.num_branch_embedding_layers)
+    f.write('reco_efficiency             = {}'.format(reco_efficiency))
