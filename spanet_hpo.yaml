@@ -1,7 +1,7 @@
 kind: Experiment
 metadata:
   namespace: jonathan-bossio
-  name: spanet-v2image-v01
+  name: spanet-v2image-v02
 spec:
   parallelTrialCount: 1
   maxTrialCount: 4
@@ -127,7 +127,7 @@ spec:
               - name: {{.Trial}}
                 resources:
                   limits:
-                    nvidia.com/gpu: 1
+                    nvidia.com/gpu: 0
                 envFrom:
                   - configMapRef:
                       name: userid-configmap
