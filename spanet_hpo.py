@@ -45,6 +45,8 @@ parser.add_argument('--training_file',                type=str,   default='/eos/
 parser.add_argument('--validation_file',              type=str,   default='') 
 parser.add_argument('--testing_file',                 type=str,   default='/eos/user/j/jbossios/SUSY/SpaNet/SpaNetInputs/signal_testing_v4.h5') 
 
+args = parser.parse_args()
+
 options = Options(args.event_file, args.training_file, args.validation_file)
 # Override default options
 options.learning_rate               = args.learning_rate
