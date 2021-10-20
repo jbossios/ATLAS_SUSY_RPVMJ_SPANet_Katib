@@ -137,16 +137,13 @@ results, jet_limits = evaluate_model(model, True if options.num_gpu > 0 else Fal
 reco_efficiency    = results[None]["2g/event_purity"]
 
 # Write metrics
-model_output_dir = '/model_outputs'
-
-if not os.path.exists(model_output_dir):
-    os.makedirs(model_output_dir)
+model_output_dir = '/eos/user/j/jbossios/SUSY/SpaNet/Katib/Outputs/'
 
 # get random number
 import random
 r = random.random()
 
-with open(model_output_dir + '/metrics_custom_{}.txt'.format(r), 'w') as f:
+with open(model_output_dir + 'metrics_custom_{}.txt'.format(r), 'w') as f:
     f.write('learning_rate               = {}'.format(options.learning_rate)
     f.write('hidden_dim                  = {}'.format(options.hidden_dim)
     f.write('initial_embedding_dim       = {}'.format(options.initial_embedding_dim)
