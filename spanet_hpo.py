@@ -14,12 +14,13 @@ from pytorch_lightning.callbacks import LearningRateMonitor, ModelCheckpoint
 # Copy Secret
 os.system('cp /secret/krb-secret-vol/krb5cc_1000 /tmp/krb5cc_1000')
 os.system('chmod 600 /tmp/krb5cc_1000')
+os.system('cp /secret/krb-secret-vol/krb5cc_1000 /tmp/krb5cc_0')
+os.system('chmod 600 /tmp/krb5cc_0')
 os.system('ls /tmp')
-os.system('ls /eos/user/j/jbossios')
 os.system('ls /eos/user/j/jbossios/SUSY/SpaNet/PackageForKubeflow/SPANet/')
 
 import sys
-sys.path.insert(1, '/eos/user/j/jbossios/SUSY/SpaNet/PackageForKubeflow/SPANet/spanet')
+sys.path.insert(1, '/eos/user/j/jbossios/SUSY/SpaNet/PackageForKubeflow/SPANet/')
 from spanet import JetReconstructionModel, Options
 from spanet.dataset.evaluator import SymmetricEvaluator, EventInfo
 from spanet.evaluation import predict_on_test_dataset, load_model
