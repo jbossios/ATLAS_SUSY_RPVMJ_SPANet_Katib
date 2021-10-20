@@ -144,13 +144,13 @@ import random
 r = random.random()
 
 with open(model_output_dir + 'metrics_custom_{}.txt'.format(r), 'w') as f:
-    f.write('learning_rate               = {}'.format(options.learning_rate)
-    f.write('hidden_dim                  = {}'.format(options.hidden_dim)
-    f.write('initial_embedding_dim       = {}'.format(options.initial_embedding_dim)
-    f.write('num_branch_encoder_layers   = {}'.format(options.num_branch_encoder_layers)
-    f.write('num_encoder_layers          = {}'.format(options.num_encoder_layers)
-    f.write('num_attention_heads         = {}'.format(options.num_attention_heads)
-    f.write('num_branch_embedding_layers = {}'.format(options.num_branch_embedding_layers)
+    f.write('learning_rate               = {}'.format(options.learning_rate))
+    f.write('hidden_dim                  = {}'.format(options.hidden_dim))
+    f.write('initial_embedding_dim       = {}'.format(options.initial_embedding_dim))
+    f.write('num_branch_encoder_layers   = {}'.format(options.num_branch_encoder_layers))
+    f.write('num_encoder_layers          = {}'.format(options.num_encoder_layers))
+    f.write('num_attention_heads         = {}'.format(options.num_attention_heads))
+    f.write('num_branch_embedding_layers = {}'.format(options.num_branch_embedding_layers))
     f.write('reco_efficiency             = {}'.format(reco_efficiency))
 
 # Write metric for Katib
