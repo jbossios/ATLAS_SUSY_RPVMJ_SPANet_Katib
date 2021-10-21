@@ -62,7 +62,7 @@ options.combine_pair_loss           = 'softmin'
 options.epochs                      = args.epochs
 options.num_attention_heads         = args.num_attention_heads
 options.num_branch_embedding_layers = args.num_branch_embedding_layers
-options.num_gpu                     = 0 # FIXME
+options.num_gpu                     = 1 # FIXME
 options.optimizer                   = 'AdamW'
 options.testing_file                = args.testing_file
 # print options
@@ -148,14 +148,14 @@ import random
 r = random.random()
 
 with open(model_output_dir + 'metrics_custom_{}.txt'.format(r), 'w') as f:
-    f.write('learning_rate               = {}'.format(options.learning_rate))
-    f.write('hidden_dim                  = {}'.format(options.hidden_dim))
-    f.write('initial_embedding_dim       = {}'.format(options.initial_embedding_dim))
-    f.write('num_branch_encoder_layers   = {}'.format(options.num_branch_encoder_layers))
-    f.write('num_encoder_layers          = {}'.format(options.num_encoder_layers))
-    f.write('num_attention_heads         = {}'.format(options.num_attention_heads))
-    f.write('num_branch_embedding_layers = {}'.format(options.num_branch_embedding_layers))
-    f.write('reco_efficiency             = {}'.format(reco_efficiency))
+    f.write('learning_rate               = {}\n'.format(options.learning_rate))
+    f.write('hidden_dim                  = {}\n'.format(options.hidden_dim))
+    f.write('initial_embedding_dim       = {}\n'.format(options.initial_embedding_dim))
+    f.write('num_branch_encoder_layers   = {}\n'.format(options.num_branch_encoder_layers))
+    f.write('num_encoder_layers          = {}\n'.format(options.num_encoder_layers))
+    f.write('num_attention_heads         = {}\n'.format(options.num_attention_heads))
+    f.write('num_branch_embedding_layers = {}\n'.format(options.num_branch_embedding_layers))
+    f.write('reco_efficiency             = {}\n'.format(reco_efficiency))
 
 # Write metric for Katib
 model_output_dir = '/model_outputs'
