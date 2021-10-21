@@ -1,7 +1,7 @@
 kind: Experiment
 metadata:
   namespace: jonathan-bossio
-  name: spanet-v9image-v01
+  name: spanet-v10image-v01
 spec:
   parallelTrialCount: 1
   maxTrialCount: 1
@@ -128,7 +128,7 @@ spec:
               - name: {{.Trial}}
                 resources:
                   limits:
-                    nvidia.com/gpu: 0
+                    nvidia.com/gpu: 1
                 envFrom:
                   - configMapRef:
                       name: userid-configmap
@@ -137,7 +137,7 @@ spec:
                     mountPath: /eos
                   - name: krb-secret-vol
                     mountPath: /secret/krb-secret-vol
-                image: gitlab-registry.cern.ch/jbossios/docker-images/atlas-spanet-jona-v9
+                image: gitlab-registry.cern.ch/jbossios/docker-images/atlas-spanet-jona-v10
                 command:
                   - "python3"
                   - "/spanet_hpo.py"
