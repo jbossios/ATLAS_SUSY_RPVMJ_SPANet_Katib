@@ -62,7 +62,7 @@ options.combine_pair_loss           = 'softmin'
 options.epochs                      = args.epochs
 options.num_attention_heads         = args.num_attention_heads
 options.num_branch_embedding_layers = args.num_branch_embedding_layers
-options.num_gpu                     = 0 # FIXME
+options.num_gpu                     = 1 # FIXME
 options.optimizer                   = 'AdamW'
 options.testing_file                = args.testing_file
 # print options
