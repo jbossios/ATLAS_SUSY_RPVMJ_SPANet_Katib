@@ -137,6 +137,8 @@ def evaluate_model(model: JetReconstructionModel, cuda: bool = False):
     return results, jet_limits
 
 # Evaluate
+if options.num_gpu > 0:
+    model = model.cuda()
 results, jet_limits = evaluate_model(model, True if options.num_gpu > 0 else False)
 reco_efficiency    = results[None]["2g/event_purity"]
 

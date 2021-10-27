@@ -1,7 +1,7 @@
 kind: Experiment
 metadata:
   namespace: jonathan-bossio
-  name: spanet-v11image-v02
+  name: spanet-v12image-v01
 spec:
   parallelTrialCount: 1
   maxTrialCount: 200
@@ -141,7 +141,7 @@ spec:
                     mountPath: /eos
                   - name: krb-secret-vol
                     mountPath: /secret/krb-secret-vol
-                image: gitlab-registry.cern.ch/jbossios/docker-images/atlas-spanet-jona-v11
+                image: gitlab-registry.cern.ch/jbossios/docker-images/atlas-spanet-jona-v12
                 command:
                   - "python3"
                   - "/spanet_hpo.py"
