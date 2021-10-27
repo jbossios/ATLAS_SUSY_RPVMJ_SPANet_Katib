@@ -1,7 +1,7 @@
 kind: Experiment
 metadata:
   namespace: jonathan-bossio
-  name: spanet-v11image-v01
+  name: spanet-v11image-v02
 spec:
   parallelTrialCount: 1
   maxTrialCount: 200
