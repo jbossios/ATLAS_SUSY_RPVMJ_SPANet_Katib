@@ -17,17 +17,17 @@ os.system('chmod 600 /tmp/krb5cc_1000')
 os.system('cp /secret/krb-secret-vol/krb5cc_1000 /tmp/krb5cc_0')
 os.system('chmod 600 /tmp/krb5cc_0')
 os.system('ls /tmp')
-os.system('ls /eos/user/j/jbossios/SUSY/SpaNet/PackageForKubeflow/SPANet/')
+os.system('ls /eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_package/SPANet/')
 
 import sys
-sys.path.insert(1, '/eos/user/j/jbossios/SUSY/SpaNet/PackageForKubeflow/SPANet/')
+sys.path.insert(1, '/eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_package/SPANet/')
 from spanet import JetReconstructionModel, Options
 from spanet.dataset.evaluator import SymmetricEvaluator, EventInfo
 from spanet.evaluation import predict_on_test_dataset, load_model
 
 # Read arguments
 parser = argparse.ArgumentParser(description='Spanet Params')
-parser.add_argument('--epochs',                       type=int,   default=10,      help='Number of epochs')
+parser.add_argument('--epochs',                       type=int,   default=50,      help='Number of epochs')
 parser.add_argument('--learning_rate',                type=float, default=0.0001,  help='Learning rate')
 parser.add_argument('--batch_size',                   type=int,   default=2048,    help='Batch size')
 parser.add_argument('--dropout',                      type=float, default=0.0,     help='Dropout percentage')
@@ -40,10 +40,10 @@ parser.add_argument('--partial_events',               type=int,   default=0,    
 parser.add_argument('--num_attention_heads',          type=int,   default=8,       help='try with 4 and 12 too')
 parser.add_argument('--num_branch_embedding_layers',  type=int,   default=5,       help='Try with 4 and 6')
 parser.add_argument('--num_jet_encoder_layers',       type=int,   default=1,       help='Try with 0 and 1')
-parser.add_argument('--event_file',                   type=str,   default='/eos/user/j/jbossios/SUSY/SpaNet/PackageForKubeflow/SPANet/event_files/signal.ini')
-parser.add_argument('--training_file',                type=str,   default='/eos/user/j/jbossios/SUSY/SpaNet/SpaNetInputs/signal_training_v4.h5')
+parser.add_argument('--event_file',                   type=str,   default='/eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_package/SPANet/event_files/signal.ini')
+parser.add_argument('--training_file',                type=str,   default='/eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_inputs/signal_training_v4.h5')
 parser.add_argument('--validation_file',              type=str,   default='') 
-parser.add_argument('--testing_file',                 type=str,   default='/eos/user/j/jbossios/SUSY/SpaNet/SpaNetInputs/signal_testing_v4.h5') 
+parser.add_argument('--testing_file',                 type=str,   default='/eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_inputs/signal_testing_v4.h5') 
 
 args = parser.parse_args()
 
@@ -74,8 +74,19 @@ model = JetReconstructionModel(options)
 # If we are using more than one gpu, then switch to DDP training
 distributed_backend = 'dp' if options.num_gpu > 1 else None
 
+# Write metrics to EOS for postprocessing
+#model_output_dir = '/eos/user/j/jbossios/SUSY/SpaNet/Katib/Outputs/'
+model_output_dir = '/eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/Katib_HyperparameterOptimization/Outputs/'
+
+# get random number
+import random
+randN = random.random()
+
 # Construct the logger for this training run. Logs will be saved in {logdir}/{name}/version_i
-log_dir = getcwd()
+#log_dir = getcwd()
+log_dir = model_output_dir + 'Model_{}'.format(randN)
+if not os.path.exists(log_dir+'/spanet_output'):
+    os.makedirs(log_dir+'/spanet_output')
 logger  = TensorBoardLogger(save_dir=log_dir, name='spanet_output', log_graph=False)
 
 # Create the checkpoint for this training run. We will save the best validation networks based on 'accuracy'
@@ -137,19 +148,17 @@ def evaluate_model(model: JetReconstructionModel, cuda: bool = False):
     return results, jet_limits
 
 # Evaluate
-if options.num_gpu > 0:
-    model = model.cuda()
+
+# load model
+log_directory = log_dir + '/spanet_output/version_0'
+model         = load_model(log_directory, options.testing_file, options.event_info_file, options.batch_size, True if options.num_gpu > 0 else False)
+
+#if options.num_gpu > 0:
+#    model = model.cuda()
 results, jet_limits = evaluate_model(model, True if options.num_gpu > 0 else False)
 reco_efficiency    = results[None]["2g/event_purity"]
 
-# Write metrics to EOS for postprocessing
-model_output_dir = '/eos/user/j/jbossios/SUSY/SpaNet/Katib/Outputs/'
-
-# get random number
-import random
-r = random.random()
-
-with open(model_output_dir + 'metrics_custom_{}.txt'.format(r), 'w') as f:
+with open(model_output_dir + 'metrics_custom_{}.txt'.format(randN), 'w') as f:
     f.write('learning_rate               = {}\n'.format(options.learning_rate))
     f.write('hidden_dim                  = {}\n'.format(options.hidden_dim))
     f.write('initial_embedding_dim       = {}\n'.format(options.initial_embedding_dim))
