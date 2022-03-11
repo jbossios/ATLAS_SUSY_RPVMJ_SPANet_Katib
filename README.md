@@ -19,3 +19,5 @@ Repository with docker images: https://gitlab.cern.ch/jbossios/docker-images
 3. Click on ```Hyperparameter Tuning```
 4. Copy the content of the yaml file (example: spanet_hpo_cpu_v17_11032022.yaml) and click on ```DEPLOY```
 5. Job can be monitored under Katib > HP > Monitor
+
+## TODO: add instructions on how to find optimal choice using all the outputs
