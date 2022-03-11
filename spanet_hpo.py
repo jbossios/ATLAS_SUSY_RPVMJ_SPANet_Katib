@@ -17,17 +17,19 @@ os.system('chmod 600 /tmp/krb5cc_1000')
 os.system('cp /secret/krb-secret-vol/krb5cc_1000 /tmp/krb5cc_0')
 os.system('chmod 600 /tmp/krb5cc_0')
 os.system('ls /tmp')
-os.system('ls /eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_package/SPANet/')
+#os.system('ls /eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_package/SPANet/')
+os.system('ls /eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_package_backup_notebook/SPANet/')
 
 import sys
-sys.path.insert(1, '/eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_package/SPANet/')
+#sys.path.insert(1, '/eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_package/SPANet/')
+sys.path.insert(1, '/eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_package_backup_notebook/SPANet/')
 from spanet import JetReconstructionModel, Options
 from spanet.dataset.evaluator import SymmetricEvaluator, EventInfo
 from spanet.evaluation import predict_on_test_dataset, load_model
 
 # Read arguments
 parser = argparse.ArgumentParser(description='Spanet Params')
-parser.add_argument('--epochs',                       type=int,   default=50,      help='Number of epochs')
+parser.add_argument('--epochs',                       type=int,   default=10,      help='Number of epochs')
 parser.add_argument('--learning_rate',                type=float, default=0.0001,  help='Learning rate')
 parser.add_argument('--batch_size',                   type=int,   default=2048,    help='Batch size')
 parser.add_argument('--dropout',                      type=float, default=0.0,     help='Dropout percentage')
@@ -62,7 +64,7 @@ options.combine_pair_loss           = 'softmin'
 options.epochs                      = args.epochs
 options.num_attention_heads         = args.num_attention_heads
 options.num_branch_embedding_layers = args.num_branch_embedding_layers
-options.num_gpu                     = 1 # FIXME
+options.num_gpu                     = 0 # FIXME?
 options.optimizer                   = 'AdamW'
 options.testing_file                = args.testing_file
 # print options
@@ -83,7 +85,6 @@ import random
 randN = random.random()
 
 # Construct the logger for this training run. Logs will be saved in {logdir}/{name}/version_i
-#log_dir = getcwd()
 log_dir = model_output_dir + 'Model_{}'.format(randN)
 if not os.path.exists(log_dir+'/spanet_output'):
     os.makedirs(log_dir+'/spanet_output')
