@@ -1,0 +1,153 @@
+kind: Experiment
+metadata:
+  namespace: jonathan-bossio
+  name: spanet-v18image-v01
+spec:
+  parallelTrialCount: 6
+  maxTrialCount: 300
+  maxFailedTrialCount: 1
+  objective:
+    type: maximize
+    goal: 1
+    objectiveMetricName: reco_efficiency
+  algorithm:
+    algorithmName: random
+  metricsCollectorSpec:
+    source:
+      filter:
+        metricsFormat:
+        - ([\w|-]+)\s*=\s*((-?\d+)(\.\d+)?)
+      fileSystemPath:
+        path: "/model_outputs/metrics_custom.txt"
+        kind: File
+    collector:
+        kind: File
+  parameters:
+    - name: --learning_rate
+      parameterType: categorical
+      feasibleSpace:
+        list:
+          - "0.001"
+          - "0.0015"
+          - "0.003"
+    - name: --batch_size
+      parameterType: discrete
+      feasibleSpace:
+        list:
+          - "2048"
+    - name: --dropout
+      parameterType: categorical
+      feasibleSpace:
+        list:
+          - "0.0"
+          - "0.1"
+    - name: --l2_penalty
+      parameterType: categorical
+      feasibleSpace:
+        list:
+          - "0.0002"
+          - "0.00002"
+    - name: --hidden_dim
+      parameterType: discrete
+      feasibleSpace:
+        list:
+          - "128"
+    - name: --initial_embedding_dim
+      parameterType: discrete
+      feasibleSpace:
+        list:
+          - "16"
+    - name: --num_branch_encoder_layers
+      parameterType: discrete
+      feasibleSpace:
+        list:
+          - "3"
+          - "5"
+          - "7"
+    - name: --num_encoder_layers
+      parameterType: discrete
+      feasibleSpace:
+        list:
+          - "2"
+          - "5"
+          - "6"
+    - name: --partial_events
+      parameterType: discrete
+      feasibleSpace:
+        list:
+          - "0"
+    - name: --num_attention_heads
+      parameterType: discrete
+      feasibleSpace:
+        list:
+          - "4"
+    - name: --num_branch_embedding_layers
+      parameterType: discrete
+      feasibleSpace:
+        list:
+          - "5"
+    - name: --num_jet_encoder_layers
+      parameterType: discrete
+      feasibleSpace:
+        list:
+          - "1"
+  trialTemplate:
+    retain: true
+    goTemplate:
+      rawTemplate: |-
+        apiVersion: batch/v1
+        kind: Job
+        metadata:
+          name: {{.Trial}}
+          namespace: {{.NameSpace}}
+        spec:
+          backoffLimit: 0
+          template:
+            metadata:
+              annotations:
+                sidecar.istio.io/inject: "false"
+              labels:
+                access-ml-pipeline: "true"
+            spec:
+              restartPolicy: Never
+              serviceAccountName: pipeline-runner
+              volumes:
+                - name: eos
+                  hostPath:
+                    path: /var/eos
+                - name: krb-secret-vol
+                  secret:
+                    secretName: krb-secret
+                - name: nvidia-driver
+                  hostPath:
+                    path: /opt/nvidia-driver
+                    type: ""
+              containers:
+              - name: {{.Trial}}
+                resources:
+                  limits:
+                    nvidia.com/gpu: 1
+                env:
+                  - name: PATH
+                    value: /bin:/usr/bin:/usr/local/bin:/opt/nvidia-driver/bin
+                  - name: LD_LIBRARY_PATH
+                    value: /opt/nvidia-driver/lib64
+                envFrom:
+                  - configMapRef:
+                      name: userid-configmap
+                volumeMounts:
+                  - name: eos
+                    mountPath: /eos
+                  - name: krb-secret-vol
+                    mountPath: /secret/krb-secret-vol
+                  - name: nvidia-driver
+                    mountPath: /opt/nvidia-driver
+                image: gitlab-registry.cern.ch/jbossios/docker-images/atlas-spanet-jona-v18
+                command:
+                  - "python3"
+                  - "/spanet_hpo.py"
+                  {{- with .HyperParameters}}
+                  {{- range .}}
+                  - "{{.Name}}={{.Value}}"
+                  {{- end}}
+                  {{- end}}

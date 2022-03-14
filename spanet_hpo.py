@@ -42,10 +42,10 @@ parser.add_argument('--partial_events',               type=int,   default=0,    
 parser.add_argument('--num_attention_heads',          type=int,   default=8,       help='try with 4 and 12 too')
 parser.add_argument('--num_branch_embedding_layers',  type=int,   default=5,       help='Try with 4 and 6')
 parser.add_argument('--num_jet_encoder_layers',       type=int,   default=1,       help='Try with 0 and 1')
-parser.add_argument('--event_file',                   type=str,   default='/eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_package/SPANet/event_files/signal.ini')
-parser.add_argument('--training_file',                type=str,   default='/eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_inputs/signal_training_v4.h5')
+parser.add_argument('--event_file',                   type=str,   default='/eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_package_backup_notebook/SPANet/event_files/signal.ini')
+parser.add_argument('--training_file',                type=str,   default='/eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_inputs/signal_UDB_UDS_training_v40.h5')
 parser.add_argument('--validation_file',              type=str,   default='') 
-parser.add_argument('--testing_file',                 type=str,   default='/eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_inputs/signal_testing_v4.h5') 
+parser.add_argument('--testing_file',                 type=str,   default='/eos/atlas/atlascerngroupdisk/phys-susy/RPV_mutlijets_ANA-SUSY-2019-24/spanet_jona/SPANET_inputs/signal_UDB_UDS_testing_v40.h5')
 
 args = parser.parse_args()
 
