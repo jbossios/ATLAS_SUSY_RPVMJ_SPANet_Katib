@@ -6,9 +6,11 @@ If ```spanet_hpo.py``` was modified, create a new docker image (otherwise, use g
 
 Run the following to create a new docker image (change CUSTOM accordingly):
 
+```
 sudo docker login gitlab-registry.cern.ch
 sudo docker build . -f Dockerfile -t gitlab-registry.cern.ch/jbossios/docker-images/CUSTOM
 sudo docker push gitlab-registry.cern.ch/jbossios/docker-images/CUSTOM
+```
 
 Repository with docker images: https://gitlab.cern.ch/jbossios/docker-images
 
@@ -17,7 +19,7 @@ Repository with docker images: https://gitlab.cern.ch/jbossios/docker-images
 1. Go to https://ml.cern.ch
 2. Open the Katib tab
 3. Click on ```Hyperparameter Tuning```
-4. Copy the content of the yaml file (example: spanet_hpo_cpu_v17_11032022.yaml) and click on ```DEPLOY```
+4. Copy the content of the yaml file (example: spanet_hpo_cpu_v17_11032022.yaml) and click on ```DEPLOY```. Note that the yaml file lists all parameters that will be variated and which values will be used.
 5. Job can be monitored under Katib > HP > Monitor
 
 ## How to find optimal choice (set of hyperparameters that maximizes the reconstruction efficiency) using all the outputs
